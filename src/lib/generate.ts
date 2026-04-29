@@ -6,9 +6,13 @@ import { buildBreachNotificationPrompt } from './prompts/breach-notification';
 import { buildRecordkeepingPrompt } from './prompts/recordkeeping';
 import type { FirmData, DocumentType, DocumentSection } from './types';
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+let _client: Anthropic | null = null;
+function getClient(): Anthropic {
+  if (!_client) {
+    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  }
+  return _client;
+}
 
 const PROMPT_BUILDERS: Record<DocumentType, (firm: FirmData) => string> = {
   'incident-response': buildIncidentResponsePrompt,
@@ -23,7 +27,7 @@ export async function generateDocument(
 ): Promise<DocumentSection[]> {
   const userPrompt = PROMPT_BUILDERS[docType](firmData);
 
-  const response = await client.messages.create({
+  const response = await getClient().messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 8000,
     system: SYSTEM_PROMPT,
