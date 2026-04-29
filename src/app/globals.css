@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-navy: #060a13;
+  --color-navy-light: #0d1424;
+  --color-navy-card: #111827;
+  --color-navy-border: #1e293b;
+  --color-cyan: #00d4ff;
+  --color-cyan-dim: #00a3c7;
+  --color-emerald: #00ff88;
+  --color-emerald-dim: #00c76a;
+  --color-slate-400: #94a3b8;
+  --color-slate-300: #cbd5e1;
+  --color-slate-500: #64748b;
+  --color-red-400: #f87171;
+  --color-amber-400: #fbbf24;
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-space-grotesk);
+}
+
+body {
+  background: var(--color-navy);
+  color: #e2e8f0;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-navy);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-navy-border);
+  border-radius: 3px;
+}
+
+/* Focus styles */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cyan);
+  border-color: var(--color-cyan);
+}
+
+/* Number input hide spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
