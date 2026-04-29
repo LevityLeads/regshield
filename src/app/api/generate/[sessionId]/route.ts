@@ -14,7 +14,7 @@ export async function POST(
   try {
     // Get the session
     const { data: session, error: sessionError } = await supabase
-      .from('sessions')
+      .from('regshield_sessions')
       .select('*')
       .eq('id', sessionId)
       .single();
@@ -25,7 +25,7 @@ export async function POST(
 
     // Check if already generated
     const { data: existingDocs } = await supabase
-      .from('documents')
+      .from('regshield_documents')
       .select('id')
       .eq('session_id', sessionId);
 
@@ -51,7 +51,7 @@ export async function POST(
       generated_at: new Date().toISOString(),
     }));
 
-    const { error: insertError } = await supabase.from('documents').insert(inserts);
+    const { error: insertError } = await supabase.from('regshield_documents').insert(inserts);
 
     if (insertError) {
       console.error('Failed to store documents:', insertError);

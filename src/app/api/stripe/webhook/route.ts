@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     if (sessionId) {
       await supabase
-        .from('sessions')
+        .from('regshield_sessions')
         .update({
           paid: true,
           paid_at: new Date().toISOString(),

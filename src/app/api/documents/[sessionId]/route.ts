@@ -9,7 +9,7 @@ export async function GET(
 
   try {
     const { data: documents, error } = await supabase
-      .from('documents')
+      .from('regshield_documents')
       .select('id, doc_type, generated_at')
       .eq('session_id', sessionId)
       .order('doc_type');

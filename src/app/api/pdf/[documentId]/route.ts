@@ -14,8 +14,8 @@ export async function GET(
   try {
     // Get the document
     const { data: doc, error: docError } = await supabase
-      .from('documents')
-      .select('*, sessions(*)')
+      .from('regshield_documents')
+      .select('*, regshield_sessions(*)')
       .eq('id', documentId)
       .single();
 
@@ -23,7 +23,7 @@ export async function GET(
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
     }
 
-    const session = doc.sessions;
+    const session = doc.regshield_sessions;
     const firmData = session.firm_data;
     const sections = (doc.content as { sections: DocumentSection[] }).sections;
     const docType = doc.doc_type as DocumentType;

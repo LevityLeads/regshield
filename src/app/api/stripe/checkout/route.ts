@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     // Verify session exists
     const { data: session, error } = await supabase
-      .from('sessions')
+      .from('regshield_sessions')
       .select('id, email')
       .eq('id', sessionId)
       .single();
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     if (!priceId) {
       // Dev mode: skip payment, mark as paid directly
       await supabase
-        .from('sessions')
+        .from('regshield_sessions')
         .update({ paid: true, paid_at: new Date().toISOString() })
         .eq('id', sessionId);
       return NextResponse.json({ url: null, devMode: true });
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
     // Store Stripe session ID
     await supabase
-      .from('sessions')
+      .from('regshield_sessions')
       .update({ stripe_session_id: checkoutSession.id })
       .eq('id', sessionId);
 

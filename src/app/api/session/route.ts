@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { data, error } = await supabase
-      .from('sessions')
+      .from('regshield_sessions')
       .insert({ firm_data: firmData, email })
       .select('id')
       .single();
