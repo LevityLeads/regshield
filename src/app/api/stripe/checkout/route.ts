@@ -47,6 +47,14 @@ export async function POST(req: NextRequest) {
       metadata: {
         sessionId,
       },
+      custom_text: {
+        submit: {
+          message: 'RegShield by Levity: Your compliance documents will be generated immediately after payment.',
+        },
+      },
+      payment_intent_data: {
+        statement_descriptor: 'REGSHIELD',
+      },
       success_url: `${appUrl}/results/${sessionId}?paid=true`,
       cancel_url: `${appUrl}/start`,
     });
