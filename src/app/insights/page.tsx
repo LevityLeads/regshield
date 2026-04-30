@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Clock, Tag } from 'lucide-react';
+import { ArrowRight, Clock, Tag, ClipboardCheck } from 'lucide-react';
 import { getAllInsights } from '@/lib/insights';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
@@ -69,6 +69,37 @@ export default function InsightsPage() {
               professionals who understand the reality of running a small RIA.
             </p>
           </div>
+
+          {/* Featured Tool Banner */}
+          <Link
+            href="/tools/compliance-checker"
+            className="group block border border-cyan/20 rounded-xl bg-cyan/5 hover:bg-cyan/10 hover:border-cyan/40 transition-all duration-200 mb-8"
+          >
+            <div className="p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-cyan/10 border border-cyan/20 flex items-center justify-center">
+                <ClipboardCheck size={24} className="text-cyan" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-medium text-cyan bg-cyan/10 px-2 py-0.5 rounded-full">
+                    Free Tool
+                  </span>
+                </div>
+                <h2 className="text-lg font-semibold font-[family-name:var(--font-heading)] text-white group-hover:text-cyan transition-colors">
+                  Reg S-P Compliance Readiness Checker
+                </h2>
+                <p className="text-sm text-slate-400 mt-1">
+                  Take our 3-minute assessment to find out how ready your firm is for the June 2026 deadline.
+                </p>
+              </div>
+              <div className="flex-shrink-0 hidden sm:block">
+                <span className="inline-flex items-center gap-1 text-sm font-medium text-cyan opacity-0 group-hover:opacity-100 transition-opacity">
+                  Take Assessment
+                  <ArrowRight size={16} />
+                </span>
+              </div>
+            </div>
+          </Link>
 
           {insights.length === 0 ? (
             <div className="text-center py-20 border border-navy-border rounded-xl bg-navy-card">

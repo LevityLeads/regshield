@@ -15,6 +15,12 @@ export default function Footer() {
 
           <div className="flex items-center gap-6 text-sm text-slate-400">
             <Link
+              href="/tools/compliance-checker"
+              className="hover:text-white transition-colors"
+            >
+              Tools
+            </Link>
+            <Link
               href="/insights"
               className="hover:text-white transition-colors"
             >

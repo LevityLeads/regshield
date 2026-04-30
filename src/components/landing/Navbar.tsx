@@ -17,6 +17,12 @@ export default function Navbar() {
 
         <div className="flex items-center gap-6">
           <Link
+            href="/tools/compliance-checker"
+            className="text-sm text-slate-400 hover:text-white transition-colors hidden sm:block"
+          >
+            Tools
+          </Link>
+          <Link
             href="/insights"
             className="text-sm text-slate-400 hover:text-white transition-colors hidden sm:block"
           >
