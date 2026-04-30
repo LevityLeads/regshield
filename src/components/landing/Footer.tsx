@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Shield } from 'lucide-react';
 
 export default function Footer() {
@@ -12,12 +13,27 @@ export default function Footer() {
             </span>
           </div>
 
-          <div className="text-sm text-slate-500 text-center">
-            RegShield generates compliance templates based on published SEC guidance.
-            This is not legal advice. Consult qualified legal counsel.
+          <div className="flex items-center gap-6 text-sm text-slate-400">
+            <Link
+              href="/insights"
+              className="hover:text-white transition-colors"
+            >
+              Insights
+            </Link>
+            <Link
+              href="/about"
+              className="hover:text-white transition-colors"
+            >
+              About
+            </Link>
           </div>
         </div>
-        <div className="mt-6 text-center text-xs text-slate-500/60">
+
+        <div className="mt-6 text-center text-sm text-slate-500">
+          RegShield generates compliance templates based on published SEC guidance.
+          This is not legal advice. Consult qualified legal counsel.
+        </div>
+        <div className="mt-3 text-center text-xs text-slate-500/60">
           A product by Levity Leads Ltd.
         </div>
       </div>
