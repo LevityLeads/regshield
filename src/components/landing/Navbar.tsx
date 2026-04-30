@@ -20,7 +20,7 @@ export default function Navbar() {
             href="/tools/compliance-checker"
             className="text-sm text-slate-400 hover:text-white transition-colors hidden sm:block"
           >
-            Tools
+            Free Tools
           </Link>
           <Link
             href="/insights"

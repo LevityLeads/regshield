@@ -18,7 +18,7 @@ export default function Footer() {
               href="/tools/compliance-checker"
               className="hover:text-white transition-colors"
             >
-              Tools
+              Free Tools
             </Link>
             <Link
               href="/insights"
