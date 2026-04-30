@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
-    const { sessionId } = await req.json();
+    const { sessionId, utms } = await req.json();
 
     if (!sessionId) {
       return NextResponse.json({ error: 'Missing sessionId' }, { status: 400 });
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
       ],
       metadata: {
         sessionId,
+        ...(utms && typeof utms === 'object' ? utms : {}),
       },
       custom_text: {
         submit: {

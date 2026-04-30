@@ -50,7 +50,11 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
           <Script id="ga-init" strategy="afterInteractive">
-            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
+            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');${
+              process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
+                ? `gtag('config','${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');`
+                : ''
+            }`}
           </Script>
         </>
       )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shield, ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -16,6 +16,46 @@ import {
   type FirmData,
   type ServiceProvider,
 } from '@/lib/types';
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+type UtmKey = typeof UTM_KEYS[number];
+
+function captureUtmParams(): Partial<Record<UtmKey, string>> {
+  if (typeof window === 'undefined') return {};
+  const params = new URLSearchParams(window.location.search);
+  const utms: Partial<Record<UtmKey, string>> = {};
+  for (const key of UTM_KEYS) {
+    const val = params.get(key);
+    if (val) {
+      utms[key] = val;
+      try { localStorage.setItem(key, val); } catch {}
+    } else {
+      try {
+        const stored = localStorage.getItem(key);
+        if (stored) utms[key] = stored;
+      } catch {}
+    }
+  }
+  return utms;
+}
+
+function getStoredUtmParams(): Partial<Record<UtmKey, string>> {
+  if (typeof window === 'undefined') return {};
+  const utms: Partial<Record<UtmKey, string>> = {};
+  for (const key of UTM_KEYS) {
+    try {
+      const val = localStorage.getItem(key);
+      if (val) utms[key] = val;
+    } catch {}
+  }
+  return utms;
+}
 
 const STEPS = ['Firm Basics', 'Key Personnel', 'Data & Custodians', 'Service Providers', 'Review'];
 
@@ -58,6 +98,14 @@ export default function StartPage() {
 
   // Email for delivery
   const [email, setEmail] = useState('');
+
+  // Fire begin_checkout and capture UTM params on mount
+  useEffect(() => {
+    captureUtmParams();
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'begin_checkout');
+    }
+  }, []);
 
   function togglePii(type: string) {
     setPiiTypes((prev) =>
@@ -149,10 +197,11 @@ export default function StartPage() {
       const { sessionId } = await res.json();
 
       // Redirect to Stripe checkout
+      const utms = getStoredUtmParams();
       const checkoutRes = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId }),
+        body: JSON.stringify({ sessionId, utms }),
       });
       const { url } = await checkoutRes.json();
 

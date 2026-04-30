@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import {
   Shield,
@@ -33,6 +33,12 @@ interface DocumentInfo {
 
 type Status = 'checking' | 'generating' | 'ready' | 'error';
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 export default function ResultsPage() {
   const params = useParams();
   const sessionId = params.sessionId as string;
@@ -40,6 +46,25 @@ export default function ResultsPage() {
   const [documents, setDocuments] = useState<DocumentInfo[]>([]);
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
+  const purchaseFiredRef = useRef(false);
+
+  const firePurchaseEvent = useCallback(() => {
+    if (purchaseFiredRef.current) return;
+    purchaseFiredRef.current = true;
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'purchase', {
+        transaction_id: sessionId,
+        value: 299.00,
+        currency: 'USD',
+        items: [{
+          item_id: 'regshield-basic',
+          item_name: 'RegShield Compliance Package',
+          price: 299.00,
+          quantity: 1,
+        }],
+      });
+    }
+  }, [sessionId]);
 
   const checkDocuments = useCallback(async () => {
     try {
@@ -90,6 +115,7 @@ export default function ResultsPage() {
         await checkDocuments();
       }
       setStatus('ready');
+      firePurchaseEvent();
     } catch (err) {
       clearInterval(progressInterval);
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -101,13 +127,15 @@ export default function ResultsPage() {
     async function init() {
       // First check if documents already exist
       const exists = await checkDocuments();
-      if (!exists) {
+      if (exists) {
+        firePurchaseEvent();
+      } else {
         // Documents don't exist yet, trigger generation
         await triggerGeneration();
       }
     }
     init();
-  }, [checkDocuments, triggerGeneration]);
+  }, [checkDocuments, triggerGeneration, firePurchaseEvent]);
 
   return (
     <div className="min-h-screen bg-navy">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import {
   Shield,
   ArrowRight,
@@ -16,6 +16,12 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import Link from 'next/link';
+
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
@@ -542,6 +548,7 @@ function ResultsView({
   onRestart: () => void;
 }) {
   const [mounted, setMounted] = useState(false);
+  const eventFiredRef = useRef(false);
   const overallRating = getRating(results.overall);
   const totalGaps = results.categories.reduce((sum, cat) => sum + cat.gaps.length, 0);
 
@@ -550,6 +557,17 @@ function ResultsView({
     const timer = setTimeout(() => setMounted(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (eventFiredRef.current) return;
+    eventFiredRef.current = true;
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'generate_lead', {
+        event_category: 'compliance_checker',
+        value: results.overall,
+      });
+    }
+  }, [results.overall]);
 
   return (
     <div className="max-w-3xl mx-auto px-6">
